@@ -8,9 +8,9 @@ const _N_INT_MIN = 10::Integer
 function _hmc_kernel!(logΠ, Δt, nstep, q, p)
     work = similar(q)
     for _ ∈ 1:nstep
-        q += p * Δt / 2
-        p += ForwardDiff.gradient!(work, logΠ, q) * Δt
-        q += p * Δt / 2
+        q .+= p * Δt / 2
+        p .+= ForwardDiff.gradient!(work, logΠ, q) * Δt
+        q .+= p * Δt / 2
     end
 end
 
