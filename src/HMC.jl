@@ -35,6 +35,16 @@ function _argcheck(T, Δt)
     T < _N_INT_MIN * Δt && throw(ArgumentError("T must be larger than $(_N_INT_MIN) * Δt."))
 end
 
+"""
+    hmc(logΠ, x, T; Δt = 0.1, rng = Random.GLOBAL_RNG)
+
+Hamiltonian Monte Carlo sampler for an arbitrary distribution `exp(logΠ)`.
+
+# Arguments
+
+  - `T`: total integration time.
+  - `Δt = 0.1`: time step of the leap frog method.
+"""
 function hmc(logΠ, x, T; Δt = 0.1, rng = Random.GLOBAL_RNG)
     _argcheck(T, Δt)
     q = copy(x)

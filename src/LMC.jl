@@ -9,6 +9,15 @@ function _argcheck(Δt)
     Δt < 0 && throw(DomainError(Δt, "Δt must be nonnegative."))
 end
 
+"""
+    lmc(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
+
+Langevin Monte Carlo sampler for an arbitrary distribution `exp(logΠ)`.
+
+# Arguments
+
+  - `Δt = 0.1`: time step of discrete Langevin dynamics.
+"""
 function lmc(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     _argcheck(Δt)
     d = length(x)
