@@ -1,7 +1,8 @@
 module CVS
 
-export lmc
+export lmc, hmc
 
 include("LMC.jl")
+include("HMC.jl")
 
 end
