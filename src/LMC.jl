@@ -1,9 +1,9 @@
 module LMC
 
-using Random
-using LinearAlgebra
 using Distributions
 using ForwardDiff
+using LinearAlgebra
+using Random
 
 function _argcheck(Δt)
     Δt < 0 && throw(DomainError(Δt, "Δt must be nonnegative."))

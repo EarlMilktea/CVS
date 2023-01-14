@@ -1,8 +1,8 @@
 using CVS
-using Random
-using Test
-using Statistics
 using LinearAlgebra
+using Random
+using Statistics
+using Test
 
 function _logΠ_gauss(x)
     -sum(xi -> xi^2, x) / 2
