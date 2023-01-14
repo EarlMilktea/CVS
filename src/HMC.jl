@@ -3,9 +3,6 @@ module HMC
 using ForwardDiff
 using Random
 
-const _N_INT_MIN = 10::Integer
-@assert _N_INT_MIN ≥ 1
-
 function _sqnorm(x)
     sum(xi -> xi^2, x)
 end
@@ -32,7 +29,6 @@ end
 function _argcheck(T, Δt)
     T < 0 && throw(DomainError("T must be nonnegative."))
     Δt < 0 && throw(DomainError("Δt must be nonnegative."))
-    T < _N_INT_MIN * Δt && throw(ArgumentError("T must be larger than $(_N_INT_MIN) * Δt."))
 end
 
 """
