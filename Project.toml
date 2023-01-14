@@ -1,0 +1,13 @@
+name = "CVS"
+uuid = "308e04cb-bb71-4a0e-a167-0b6e8ff688fd"
+authors = ["SS"]
+version = "0.1.0"
+
+[compat]
+julia = "1.8"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
