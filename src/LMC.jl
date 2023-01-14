@@ -12,7 +12,7 @@ end
 function lmc(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     _argcheck(Δt)
     d = length(x)
-    dist = MvNormal(2Δt * Matrix{Float64}(I, d, d))
+    dist = MvNormal(zeros(d), 2Δt * I)
     ΔR = rand(rng, dist)
     xₙ = x + Δt * ForwardDiff.gradient(logΠ, x) + ΔR
     ΔRᵢ = x - xₙ - Δt * ForwardDiff.gradient(logΠ, xₙ)
