@@ -2,7 +2,7 @@ using CVS
 using LinearAlgebra
 
 function logΠ(x)
-    -LinearAlgebra.norm2(x) / 2
+    -sum(xi -> xi^2, x) / 2
 end
 
 let d = 2, n_sample = 100000, Δt = 0.1
