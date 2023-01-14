@@ -1,5 +1,7 @@
 module CVS
 
-# Write your package code here.
+export lmc
+
+include("LMC.jl")
 
 end
