@@ -33,18 +33,7 @@ function lmc(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     end
 end
 
-function lmc(logΠ, x::Real, Δt; rng = Random.GLOBAL_RNG)
-    _argcheck(Δt)
-    dist = Normal(0, 2Δt)
-    ΔR = rand(rng, dist)
-    xₙ = x + Δt * ForwardDiff.derivative(logΠ, x) + ΔR
-    ΔRᵢ = x - xₙ - Δt * ForwardDiff.derivative(logΠ, xₙ)
-    θ = logΠ(xₙ) - logΠ(x) + logpdf(dist, ΔRᵢ) - logpdf(dist, ΔR)
-    if θ ≥ 0 || rand(rng) < exp(θ)
-        xₙ
-    else
-        x
-    end
-end
+lmc(logΠ, x::Real, Δt; rng = Random.GLOBAL_RNG) =
+    lmc(logΠ, Float64[x], Δt; rng = rng)[begin]
 
 end
