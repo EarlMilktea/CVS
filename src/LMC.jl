@@ -16,7 +16,7 @@ Langevin Monte Carlo sampler for an arbitrary distribution `exp(logΠ)`.
 
 # Arguments
 
-  - `Δt = 0.1`: time step of discrete Langevin dynamics.
+  - `Δt`: time step of discrete Langevin dynamics.
 """
 function lmc(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     _argcheck(Δt)

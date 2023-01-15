@@ -23,16 +23,16 @@ function _argcheck(T, Δt)
 end
 
 """
-    hmc(logΠ, x, T; Δt = 0.1, rng = Random.GLOBAL_RNG)
+    hmc(logΠ, x, Δt, T; rng = Random.GLOBAL_RNG)
 
 Hamiltonian Monte Carlo sampler for an arbitrary distribution `exp(logΠ)`.
 
 # Arguments
 
+  - `Δt`: time step of the leap frog method.
   - `T`: total integration time.
-  - `Δt = 0.1`: time step of the leap frog method.
 """
-function hmc(logΠ, x, T; Δt = 0.1, rng = Random.GLOBAL_RNG)
+function hmc(logΠ, x, Δt, T; rng = Random.GLOBAL_RNG)
     _argcheck(T, Δt)
     q = copy(x)
     p = randn(rng, length(q))
@@ -47,7 +47,7 @@ function hmc(logΠ, x, T; Δt = 0.1, rng = Random.GLOBAL_RNG)
     end
 end
 
-hmc(logΠ, x::Real, T; Δt = 0.1, rng = Random.GLOBAL_RNG) =
-    hmc(logΠ, Float64[x], T; Δt = Δt, rng = rng)[begin]
+hmc(logΠ, x::Real, Δt, T; rng = Random.GLOBAL_RNG) =
+    hmc(logΠ, Float64[x], Δt, T; rng = rng)[begin]
 
 end

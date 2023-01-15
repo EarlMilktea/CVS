@@ -20,7 +20,6 @@ function _test_sampler(kernel, d, ns; ninit = 10000, atol = 0.025)
     end
     m = mean(work; dims = 2) |> vec
     v = cov(work; dims = 2)
-    @show m, v
     isapprox(m, zeros(d); atol = atol) && isapprox(v, I; atol = atol)
 end
 
@@ -34,9 +33,9 @@ end
 
 @testset "HMC" begin
     let rng = MersenneTwister(0)
-        @test _test_sampler(x -> hmc(_logΠ_gauss, x, 1; rng = rng), 1, 500000)
-        @test _test_sampler(x -> hmc(_logΠ_gauss, x, 1; rng = rng), 2, 500000)
-        @test _test_sampler(x -> hmc(_logΠ_gauss, x, 1; rng = rng), 5, 500000)
+        @test _test_sampler(x -> hmc(_logΠ_gauss, x, 0.1, 1; rng = rng), 1, 500000)
+        @test _test_sampler(x -> hmc(_logΠ_gauss, x, 0.1, 1; rng = rng), 2, 500000)
+        @test _test_sampler(x -> hmc(_logΠ_gauss, x, 0.1, 1; rng = rng), 5, 500000)
     end
 end
 
