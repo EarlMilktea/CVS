@@ -35,7 +35,7 @@ function lmc(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     end
 end
 
-lmc(logΠ, x::Real, Δt; rng = Random.GLOBAL_RNG) =
-    lmc(logΠ, Float64[x], Δt; rng = rng)[begin]
+lmc(logΠ, x::U, Δt; rng = Random.GLOBAL_RNG) where {U<:Real} =
+    lmc(logΠ, U[x], Δt; rng = rng)[begin]
 
 end

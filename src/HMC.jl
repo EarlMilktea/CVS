@@ -47,7 +47,7 @@ function hmc(logΠ, x, Δt, T; rng = Random.GLOBAL_RNG)
     end
 end
 
-hmc(logΠ, x::Real, Δt, T; rng = Random.GLOBAL_RNG) =
-    hmc(logΠ, Float64[x], Δt, T; rng = rng)[begin]
+hmc(logΠ, x::U, Δt, T; rng = Random.GLOBAL_RNG) where {U<:Real} =
+    hmc(logΠ, U[x], Δt, T; rng = rng)[begin]
 
 end

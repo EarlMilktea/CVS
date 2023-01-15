@@ -15,20 +15,20 @@ function _lf_kernel(logΠ, Δt, q, p, work, cfg)
     q, p
 end
 
-mutable struct _SubTree
-    q₊::Vector{Float64}
-    p₊::Vector{Float64}
-    q₋::Vector{Float64}
-    p₋::Vector{Float64}
+mutable struct _SubTree{U}
+    q₊::Vector{U}
+    p₊::Vector{U}
+    q₋::Vector{U}
+    p₋::Vector{U}
     w::Int64
     pred::Bool
-    q::Vector{Float64}
-    p::Vector{Float64}
+    q::Vector{U}
+    p::Vector{U}
 end
 
-function _mergetree(t₊, t₋, rng)
+function _mergetree(t₊::_SubTree{U}, t₋::_SubTree{U}, rng) where {U<:Real}
     w = t₊.w + t₋.w
-    ans = _SubTree(t₊.q₊, t₊.p₊, t₋.q₋, t₋.p₋, w, t₊.pred && t₋.pred, t₊.q, t₊.p)
+    ans = _SubTree{U}(t₊.q₊, t₊.p₊, t₋.q₋, t₋.p₋, w, t₊.pred && t₋.pred, t₊.q, t₊.p)
     if w ≠ 0 && rand(rng) < t₋.w / w
         ans.q = t₋.q
         ans.p = t₋.p
@@ -39,7 +39,7 @@ end
 function _gentree_root(logΠ, Δt, qp, pp, uθ, work, cfg)
     q, p = _lf_kernel(logΠ, Δt, qp, pp, work, cfg)
     w = ifelse(uθ ≤ -_sqnorm(p) / 2 + logΠ(q), 1, 0)
-    _SubTree(q, p, q, p, w, true, q, p)
+    _SubTree{eltype(qp)}(q, p, q, p, w, true, q, p)
 end
 
 function _gentree(logΠ, Δt, qp, pp, uθ, l, work, cfg, rng)
@@ -79,7 +79,7 @@ function nuts(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     q = copy(x)
     p = randn(rng, length(q))
     uθ = -_sqnorm(p) / 2 + logΠ(q) + log(rand(rng))
-    t = _SubTree(q, p, q, p, 1, true, q, p)
+    t = _SubTree{eltype(x)}(q, p, q, p, 1, true, q, p)
     work = similar(q)
     cfg = ForwardDiff.GradientConfig(logΠ, q)
     let l = 1
@@ -104,6 +104,6 @@ function nuts(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     t.q
 end
 
-nuts(logΠ, x::Real, Δt; rng = Random.GLOBAL_RNG) =
-    nuts(logΠ, Float64[x], Δt; rng = rng)[begin]
+nuts(logΠ, x::U, Δt; rng = Random.GLOBAL_RNG) where {U<:Real} =
+    nuts(logΠ, U[x], Δt; rng = rng)[begin]
 end
