@@ -8,9 +8,9 @@ function _sqnorm(x)
     sum(xi -> xi^2, x)
 end
 
-function _lf_kernel(logΠ, Δt, q, p)
+function _lf_kernel(logΠ, Δt, q, p, work, cfg)
     q += p * Δt / 2
-    p += ForwardDiff.gradient(logΠ, q) * Δt
+    p += ForwardDiff.gradient!(work, logΠ, q, cfg) * Δt
     q += p * Δt / 2
     q, p
 end
@@ -36,22 +36,22 @@ function _mergetree(t₊, t₋, rng)
     ans
 end
 
-function _gentree_root(logΠ, Δt, qp, pp, uθ)
-    q, p = _lf_kernel(logΠ, Δt, qp, pp)
+function _gentree_root(logΠ, Δt, qp, pp, uθ, work, cfg)
+    q, p = _lf_kernel(logΠ, Δt, qp, pp, work, cfg)
     w = ifelse(uθ ≤ -_sqnorm(p) / 2 + logΠ(q), 1, 0)
     _SubTree(q, p, q, p, w, true, q, p)
 end
 
-function _gentree(logΠ, Δt, qp, pp, uθ, l, rng)
+function _gentree(logΠ, Δt, qp, pp, uθ, l, work, cfg, rng)
     if l == 1
-        _gentree_root(logΠ, Δt, qp, pp, uθ)
+        _gentree_root(logΠ, Δt, qp, pp, uθ, work, cfg)
     else
-        t1 = _gentree(logΠ, Δt, qp, pp, uθ, l ÷ 2, rng)
+        t1 = _gentree(logΠ, Δt, qp, pp, uθ, l ÷ 2, work, cfg, rng)
         t = if Δt > 0
-            t2 = _gentree(logΠ, Δt, t1.q₊, t1.p₊, uθ, l ÷ 2, rng)
+            t2 = _gentree(logΠ, Δt, t1.q₊, t1.p₊, uθ, l ÷ 2, work, cfg, rng)
             _mergetree(t2, t1, rng)
         else
-            t2 = _gentree(logΠ, Δt, t1.q₋, t1.p₋, uθ, l ÷ 2, rng)
+            t2 = _gentree(logΠ, Δt, t1.q₋, t1.p₋, uθ, l ÷ 2, work, cfg, rng)
             _mergetree(t1, t2, rng)
         end
         let Δq = t.q₊ - t.q₋
@@ -80,14 +80,16 @@ function nuts(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     p = randn(rng, length(q))
     uθ = -_sqnorm(p) / 2 + logΠ(q) + log(rand(rng))
     t = _SubTree(q, p, q, p, 1, true, q, p)
+    work = similar(q)
+    cfg = ForwardDiff.GradientConfig(logΠ, q)
     let l = 1
         while true
             if rand(rng, (-1, 1)) == 1
-                tn = _gentree(logΠ, Δt, t.q₊, t.p₊, uθ, l, rng)
+                tn = _gentree(logΠ, Δt, t.q₊, t.p₊, uθ, l, work, cfg, rng)
                 tn.pred || break
                 t = _mergetree(tn, t, rng)
             else
-                tn = _gentree(logΠ, -Δt, t.q₋, t.p₋, uθ, l, rng)
+                tn = _gentree(logΠ, -Δt, t.q₋, t.p₋, uθ, l, work, cfg, rng)
                 tn.pred || break
                 t = _mergetree(t, tn, rng)
             end
