@@ -22,16 +22,6 @@ function _argcheck(T, Δt)
     Δt < 0 && throw(DomainError("Δt must be nonnegative."))
 end
 
-"""
-    hmc(logΠ, x, Δt, T; rng = Random.GLOBAL_RNG)
-
-Hamiltonian Monte Carlo sampler for an arbitrary distribution `exp(logΠ)`.
-
-# Arguments
-
-  - `Δt`: time step of the leap frog method.
-  - `T`: total integration time.
-"""
 function hmc(logΠ, x, Δt, T; rng = Random.GLOBAL_RNG)
     _argcheck(T, Δt)
     q = copy(x)

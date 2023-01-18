@@ -65,15 +65,6 @@ function _argcheck(Δt)
     Δt < 0 && throw(DomainError(Δt, "Δt must be nonnegative."))
 end
 
-"""
-    nuts(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
-
-No-U-Turn Sampler for an arbitrary distribution `exp(logΠ)`.
-
-# Arguments
-
-  - `Δt`: time step of the leap frog method.
-"""
 function nuts(logΠ, x, Δt; rng = Random.GLOBAL_RNG)
     _argcheck(Δt)
     q = copy(x)
