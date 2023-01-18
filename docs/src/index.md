@@ -4,7 +4,7 @@ CurrentModule = CVS
 
 # CVS
 
-Documentation for [CVS](https://github.com/EarlMilktea/CVS.jl).
+Documentation for [CVS](https://github.com/EarlMilktea/CVS).
 
 ```@index
 ```

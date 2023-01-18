@@ -6,15 +6,15 @@ DocMeta.setdocmeta!(CVS, :DocTestSetup, :(using CVS); recursive = true)
 makedocs(;
     modules = [CVS],
     authors = "SS",
-    repo = "https://github.com/EarlMilktea/CVS.jl/blob/{commit}{path}#{line}",
-    sitename = "CVS.jl",
+    repo = "https://github.com/EarlMilktea/CVS/blob/{commit}{path}#{line}",
+    sitename = "CVS",
     format = Documenter.HTML(;
         prettyurls = get(ENV, "CI", "false") == "true",
-        canonical = "https://EarlMilktea.github.io/CVS.jl",
+        canonical = "https://EarlMilktea.github.io/CVS",
         edit_link = "main",
         assets = String[],
     ),
     pages = ["Home" => "index.md"],
 )
 
-deploydocs(; repo = "github.com/EarlMilktea/CVS.jl", devbranch = "main")
+deploydocs(; repo = "github.com/EarlMilktea/CVS", devbranch = "main")
