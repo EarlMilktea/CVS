@@ -4,6 +4,11 @@
 <img src="joint.png" width="300">
 </div>
 
+[![Stable](https://img.shields.io/badge/docs-stable-blue.svg)](https://EarlMilktea.github.io/CVS.jl/stable/)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://EarlMilktea.github.io/CVS.jl/dev/)
+[![Build Status](https://github.com/EarlMilktea/CVS.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/EarlMilktea/CVS.jl/actions/workflows/CI.yml?query=branch%3Amain)
+
+
 Markov chain Monte Carlo sampler for arbitrary continuous distribution $\Pi(x)$.
 
 This package uses
